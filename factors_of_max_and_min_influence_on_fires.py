@@ -1,4 +1,6 @@
 import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
 
 array_min = np.zeros((10, 10))  ## create empty matrix for min values
 array_max = np.zeros((10, 10))  ## create empty matrix for min values
@@ -11,6 +13,28 @@ array_0 = np.array([[0, 0, 0.3, 0.8, 0.6, 0.7, 0.9, 0.9, 0.4, 1],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                     [0.2, 0, 0, 0.3, 0.2, 0.2, 0.2, 0.4, 0, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
+
+array_1 = np.array([[0, 0, 0.3, 0.8, 0.6, 0.7, 0.9, 0.9, 0.4, 1],   # crreate that have initial values and doesn't perform it to inf
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                    [0, 0.2, 0, 0, 0, 0.3, 0, 0.3, 0.3, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                    [0.2, 0, 0, 0.3, 0.2, 0.2, 0.2, 0.4, 0, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
+
+weighted_array = np.array([[0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                    [0, 1, 0, 0, 0, 1, 0, 1, 1, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                    [1, 0, 0, 1, 1, 1, 1, 1, 0, 1],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
 
 for i in range(0, 10):  # replace values which == 0 to infinity(it it step according to the classic Floid )
@@ -87,3 +111,18 @@ for i in range(0, 10):
 # print(max_value)
 # print(min_value)
 # print(array_max)
+
+
+array_for_plotting = weighted_array * array_1
+G = nx.from_numpy_array(array_for_plotting)
+
+# colors for edges and weights
+edge_colors = ['red','green','blue','orange','yellow','purple','cyan','magenta','brown' ,'gray' ,'black']
+edge_labels = nx.get_edge_attributes(G, 'weight')
+
+pos = nx.spring_layout(G)  # Определяем позиции вершин графа #Determine the position of verticles graph
+label_pos = 0.4 #distance from the middle of the edge
+nx.draw(G, pos, with_labels=True, edge_color=edge_colors,arrows = True, arrowstyle='->',width=2.0, node_size = 1000, font_color = 'red',font_size = 14)
+nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, label_pos=label_pos, font_color = 'green')
+plt.axis('off')
+plt.show()
